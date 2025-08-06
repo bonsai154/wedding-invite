@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Свадебное приглашение</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+    #background-carousel {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      z-index: -1;
+      opacity: 0.25;
+      filter: blur(6px);
+      transition: background-image 1s ease-in-out;
+    }
+    section {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease;
+      color: #333;
+      z-index: 1;
+    }
+    section.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .carousel img {
+      max-width: 80vw;
+      max-height: 60vh;
+      border-radius: 20px;
+      margin: 1rem;
+    }
+    .timer {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+    nav {
+      position: fixed;
+      bottom: 1rem;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      z-index: 2;
+    }
+    nav button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="background-carousel"></div>
+
+  <section class="active" id="s1">
+    <h1>Наконец-то это случается!</h1>
+    <div class="timer" id="timer"></div>
+    <p>Ждём вас в <strong>Zarhal Premium</strong>, г. Бухара</p>
+  </section>
+
+  <section id="s2">
+    <h2>Пожелание от нас</h2>
+    <p>Просим вас прийти, поесть, потанцевать, обняться и засвидетельствовать наш первый официальный поцелуй под грифом: "Теперь точно законно" 💍</p>
+  </section>
+
+  <section id="s3">
+    <h2>Наша история любви</h2>
+    <ul>
+      <li>📅 Первое сообщение в 2024</li>
+      <li>❤️ Первое 'люблю' в 2024</li>
+      <li>✈️ Первое путешествие в 2025</li>
+      <li>💍 Предложение в 2025</li>
+    </ul>
+  </section>
+
+  <section id="s4">
+    <h2>Как мы пришли к этому</h2>
+    <p>👶 Он родился в 2000 — обожал прогулку и мясо.<br>👧 Она родилась в 2005 — мечтала стать принцессой (и стала!).</p>
+    <div class="carousel">
+      <img src="img/erkin.jpg" alt="Жених в детстве">
+      <img src="img/shahlo.jpg" alt="Невеста в детстве">
+    </div>
+  </section>
+
+  <nav>
+    <button onclick="go(-1)">← Назад</button>
+    <button onclick="go(1)">Вперёд →</button>
+  </nav>
+
+  <script>
+    const sections = document.querySelectorAll("section");
+    let current = 0;
+
+    function showSection(index) {
+      sections.forEach((sec, i) => {
+        sec.classList.remove("active");
+        if (i === index) sec.classList.add("active");
+      });
+    }
+
+    function go(direction) {
+      current += direction;
+      if (current < 0) current = 0;
+      if (current >= sections.length) current = sections.length - 1;
+      showSection(current);
+    }
+
+    showSection(current);
+
+    const eventDate = new Date("2025-08-15T00:00:00");
+    const timerEl = document.getElementById("timer");
+
+    function updateTimer() {
+      const now = new Date();
+      const diff = eventDate - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      timerEl.textContent = `До свадьбы: ${days} д. ${hours} ч. ${minutes} м.`;
+    }
+
+    setInterval(updateTimer, 60000);
+    updateTimer();
+
+    const bgImages = ['img/shahlo.jpg', 'img/erkin.jpg'];
+    let bgIndex = 0;
+
+    function updateBg() {
+      const bg = document.getElementById("background-carousel");
+      bg.style.backgroundImage = `url('${bgImages[bgIndex]}')`;
+      bgIndex = (bgIndex + 1) % bgImages.length;
+    }
+
+    setInterval(updateBg, 5000);
+    updateBg();
+  </script>
+</body>
+</html>
